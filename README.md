@@ -1,44 +1,37 @@
 # Investment Intelligence Platform
 
 ## Overview
-An enterprise-style investment intelligence platform built using PySpark,
-Databricks, Delta Lake, and Medallion Architecture principles.
 
-The platform unifies UK company registry data and stock market financials
-into a centralized analytics model that supports investment screening,
-governance monitoring, and financial risk analysis.
+An enterprise-style investment intelligence platform built using PySpark, Databricks, Delta Lake, and Medallion Architecture principles.
 
-The solution resolves cross-system entity mapping challenges and transforms
-nested API data into analytics-ready Delta tables for downstream BI and
-investment insights.
+The platform unifies UK company registry data and stock market financials into a centralized analytics model for investment screening, governance monitoring, and financial risk analysis.
 
+It resolves cross-system entity mapping challenges and transforms nested API data into analytics-ready Delta tables for downstream BI and investment insights.
+
+---
 
 ## Problem Statement
 
-Company-related data is fragmented across multiple systems with incompatible
-identifiers, inconsistent schemas, and deeply nested structures.
+Company-related data is fragmented across multiple systems with incompatible identifiers, inconsistent schemas, and deeply nested structures.
 
-* **Companies House** provides legal and governance data such as company
-  profiles, officer appointments, and filing history.
-* **Yahoo Finance** provides financial market data including balance sheets,
-  income statements, cash flow, and market valuation metrics.
+* Companies House provides legal and governance data (company profiles, officers, filings)
+* Yahoo Finance provides financial market data (balance sheets, income statements, cashflow, valuation metrics)
 
-However, neither source exposes a shared identifier, making cross-source
-analysis difficult. In addition, the raw API responses are not analytics-ready:
-financial statements are delivered as nested timestamp-based structs, while
-governance records arrive as large embedded JSON arrays.
+However:
 
-As a result, analysts cannot efficiently evaluate company performance,
-financial stability, and governance risk within a single unified model.
-Teams must repeatedly perform manual data preparation, leading to duplicated
-effort, inconsistent metrics, and no centralized source of truth.
+* No shared identifier exists between systems
+* Data is not analytics-ready (nested structs + JSON arrays)
+* Cross-source analysis requires heavy manual processing
+
+This leads to duplicated effort, inconsistent metrics, and no single source of truth.
+
+---
 
 ## Why This Project Matters
 
-Business data is often spread across disconnected systems with incompatible
-identifiers and inconsistent structures.
+Business data is often scattered across disconnected systems.
 
-This project demonstrates how data engineering solves that challenge through:
+This project demonstrates how modern data engineering solves that problem through:
 
 * Multi-source API ingestion
 * Medallion Architecture
@@ -46,93 +39,100 @@ This project demonstrates how data engineering solves that challenge through:
 * Nested JSON transformation
 * Analytics-ready data modelling
 
-The result is a unified and queryable source of truth for investment and
-risk analysis.
+**Result:** A unified, queryable source of truth for investment and risk analysis.
 
+---
 
 ## Solution
 
-The platform implements an end-to-end data engineering pipeline that unifies
-financial, market, and governance datasets into a centralized analytics model.
+The platform implements an end-to-end data engineering pipeline:
 
-Ingests raw data from Companies House and Yahoo Finance APIs into Bronze
-Delta tables while preserving immutable JSON records
-Cleans, standardises, and transforms nested API responses using a
-Medallion Architecture (Bronze → Silver → Gold)
-Resolves cross-system entity mismatches through centralized ticker ↔
-company number mapping logic
-Converts deeply nested structs and arrays into analytics-ready relational
-tables using PySpark transformations
-Applies SCD Type 1 merge logic to maintain consistent and idempotent
-datasets
-Generates Gold-layer investment insights including financial health,
-governance stability, and risk-oriented company analysis
+* Ingests raw data from Companies House and Yahoo Finance into Bronze Delta tables (immutable JSON storage)
+* Transforms and cleans data using Medallion Architecture (Bronze → Silver → Gold)
+* Resolves entity mismatches via ticker ↔ company number mapping
+* Converts nested structs and arrays into relational tables using PySpark
+* Applies SCD Type 1 merges for consistent, idempotent datasets
+* Generates Gold-layer insights for financial health, governance, and risk scoring
+
+---
 
 ## Architecture
 
-The system follows a **Medallion Architecture** on Databricks / Delta Lake:
+The system follows a Medallion Architecture on Databricks / Delta Lake.
 
-See architecture.md for the complete system design, data flow, and table structure.
+See `architecture.md` for full system design.
 
 * **Bronze Layer** → Raw API ingestion and immutable JSON storage
-* **Silver Layer** → Cleaned, standardized, and analytics-ready data
-* **Gold Layer** → Investment insights, business intelligence, and risk scoring
+* **Silver Layer** → Cleaned, standardized, analytics-ready data
+* **Gold Layer** → Investment insights, BI metrics, and risk scoring
 
-
+---
 
 ## Data Sources
 
-| Source | Data |
-|--------|------|
-| Companies House API | Company info, officers, filing history |
-| Yahoo Finance API | Stock prices, balance sheet, income statement, cashflow, key stats |
+| Source              | Data                                                  |
+| ------------------- | ----------------------------------------------------- |
+| Companies House API | Company info, officers, filing history                |
+| Yahoo Finance API   | Stock data, financial statements, cashflow, key stats |
+
+---
 
 ## Companies Tracked
-20 UK LSE-listed companies:
+
+20 UK LSE-listed companies
+
+---
 
 ## Key Features
 
-- Multi-source API ingestion with rate limiting
-- Bronze layer: raw JSON preserved in Delta tables
-- Silver layer: cleaned, typed, SCD1 merged tables
-- Entity resolution: company number ↔ stock ticker mapping
-- Financial time-series analysis (balance sheet, cashflow, income statement)
-- Governance data: officer history and board composition
-- Company risk scoring engine (gold layer )
+* Multi-source API ingestion with rate limiting
+* Bronze layer raw JSON storage in Delta tables
+* Silver layer cleaned, typed, SCD Type 1 tables
+* Entity resolution (company number ↔ ticker mapping)
+* Financial time-series modelling
+* Governance and officer history analysis
+* Risk scoring engine (Gold layer)
+
+---
 
 ## Tech Stack
 
-* **Python / PySpark** — data ingestion and transformation pipelines
-* **Databricks** — distributed data processing and orchestration
-* **Delta Lake** — ACID-compliant lakehouse storage
-* **Unity Catalog** — centralized data governance and cataloging
-* **yfinance API** — stock market and financial data ingestion
-* **Companies House API** — UK company registry and governance data
+* Python / PySpark — data ingestion and transformation
+* Databricks — distributed processing and orchestration
+* Delta Lake — ACID-compliant lakehouse storage
+* Unity Catalog — data governance and cataloging
+* yfinance API — financial data ingestion
+* Companies House API — UK registry data
+
+---
 
 ## Business Use Cases
 
 * Investment screening across UK listed companies
 * Financial risk and leverage analysis
-* Governance monitoring using officer activity and board changes
+* Governance and board monitoring
 * Cross-company financial comparison
 * Compliance and filing pattern analysis
-* Centralized analytics for BI dashboards and reporting
+* BI dashboards and reporting
+
+---
 
 ## Outputs
 
 * Unified investment intelligence dataset
-* Analytics-ready Silver Delta tables
-* Ticker ↔ company number mapping model
-* Time-series financial statements by fiscal year
-* Queryable governance and officer history records
-* Gold-layer investment and risk scoring models *(in progress)*
+* Silver Delta tables (analytics-ready)
+* Ticker ↔ company mapping model
+* Time-series financial datasets
+* Governance and officer history tables
+* Gold-layer risk scoring models (in progress)
 
-
+---
 
 ## Future Improvements
-- Gold layer: company risk scoring and cross-company benchmarking
-- News sentiment ingestion — Yahoo Finance News integration for event detection
-- Real-time streaming ingestion
-- Machine learning-based risk prediction
-- Interactive dashboards
-- Expanded global company coverage
+
+* Gold layer: advanced company risk scoring
+* News sentiment analysis (market event detection)
+* Real-time streaming ingestion
+* ML-based financial risk prediction
+* Interactive dashboards
+* Expansion to global equities
