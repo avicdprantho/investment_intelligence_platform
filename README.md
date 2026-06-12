@@ -24,6 +24,8 @@ However:
 * Cross-source analysis requires heavy manual processing
 
 This leads to duplicated effort, inconsistent metrics, and no single source of truth.
+This fragmentation prevents analysts from combining financial performance, market behaviour, and governance signals into a single investment view, limiting the ability to consistently assess company health and risk.
+
 
 ---
 
